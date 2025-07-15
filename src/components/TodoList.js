@@ -10,7 +10,7 @@ import Todo from "./Todo";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import TodosContext from "../contexts/TodosContext";
 
 export default function TodoList() {
@@ -23,7 +23,7 @@ export default function TodoList() {
     if (storedTodos) {
       setTodoslist(JSON.parse(storedTodos));
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -44,12 +44,21 @@ export default function TodoList() {
     }
   };
 
+  const completedTodos = useMemo(() => {
+    return todoslist.filter((todo) => todo.completed === true);
+  }, [todoslist]);
+
+  const notCompletedTodos = useMemo(() => {
+    return todoslist.filter((todo) => todo.completed === false);
+  }, [todoslist]);
+
   let newTodos = todoslist;
   if (alignment === "nodone") {
-    newTodos = todoslist.filter((todo) => todo.completed === false);
+    newTodos = notCompletedTodos;
   } else if (alignment === "done") {
-    newTodos = todoslist.filter((todo) => todo.completed === true);
+    newTodos = completedTodos;
   }
+
   const todoslistshow = newTodos.map((todo) => {
     return <Todo key={todo.id} todo={todo} />;
   });
