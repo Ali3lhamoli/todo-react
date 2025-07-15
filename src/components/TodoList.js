@@ -23,6 +23,7 @@ export default function TodoList() {
     if (storedTodos) {
       setTodoslist(JSON.parse(storedTodos));
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
