@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import TodoList from "./components/TodoList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TodosContext from "./contexts/TodosContext";
+import { TodosProvider } from "./contexts/TodosContext";
 import { SnakeProvider } from "./contexts/SnakeContext";
 import SnackBar from "./components/SnakeBar";
 
@@ -22,12 +22,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <TodosContext.Provider value={{ todoslist, setTodoslist }}>
+        <TodosProvider>
           <SnakeProvider>
             <TodoList />
             <SnackBar />
           </SnakeProvider>
-        </TodosContext.Provider>
+        </TodosProvider>
       </div>
     </ThemeProvider>
   );

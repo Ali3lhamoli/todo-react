@@ -2,7 +2,7 @@ import { createContext, useState, useContext } from "react";
 
 const SnakeContext = createContext({});
 
-export const SnakeProvider = ({children}) => {
+export const SnakeProvider = ({ children }) => {
   const [openSnake, setOpenSnake] = useState(false);
 
   const [snakeContent, setSnakeContent] = useState(false);
@@ -17,5 +17,5 @@ export const SnakeProvider = ({children}) => {
 };
 
 export const useSnake = () => {
-    return useContext(SnakeContext);
-}
+  return useContext(SnakeContext);
+};

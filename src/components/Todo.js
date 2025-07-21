@@ -12,26 +12,22 @@ import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
 
 // Contexts
-import { useContext } from "react";
-import TodosContext from "../contexts/TodosContext";
 import { useSnake } from "../contexts/SnakeContext";
+import { useDispatch } from "../contexts/TodosContext";
 
 export default function Todo({ todo, handleClickOpen, handleOpen }) {
   // Contexts
-  const { todoslist, setTodoslist } = useContext(TodosContext);
   const { setOpenSnake, setSnakeContent } = useSnake();
+  const dispatch = useDispatch();
 
   // Toggle completion status
   const handlecompleted = () => {
-    const updatedTodos = todoslist.map((todoo) => {
-      if (todoo.id === todo.id) {
-        return { ...todoo, completed: !todoo.completed };
-      }
-      return todoo;
+    dispatch({
+      type: "complete",
+      payload: {
+        id: todo.id,
+      },
     });
-
-    setTodoslist(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setOpenSnake(true);
 
     todo.completed === true

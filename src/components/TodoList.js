@@ -15,9 +15,8 @@ import EditDialog from "./EditDialog";
 import DeleteModal from "./DeleteModal";
 
 // Utilities & Context
-import { v4 as uuidv4 } from "uuid";
-import { useContext, useEffect, useMemo, useState } from "react";
-import TodosContext from "../contexts/TodosContext";
+import { useEffect, useMemo, useState } from "react";
+import { useTodoslist, useDispatch } from "../contexts/TodosContext";
 import { useSnake } from "../contexts/SnakeContext";
 
 export default function TodoList() {
@@ -28,7 +27,8 @@ export default function TodoList() {
   const [inputvalue, setInputValue] = useState("");
 
   // Contexts
-  const { todoslist, setTodoslist } = useContext(TodosContext);
+  const todoslist = useTodoslist();
+  const dispatch = useDispatch();
   const { setOpenSnake, setSnakeContent } = useSnake();
 
   // Edit dialog state
@@ -42,10 +42,7 @@ export default function TodoList() {
 
   // Load todos from localStorage
   useEffect(() => {
-    const storedTodos = localStorage.getItem("todos");
-    if (storedTodos) {
-      setTodoslist(JSON.parse(storedTodos));
-    }
+    dispatch({ type: "render" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -57,15 +54,12 @@ export default function TodoList() {
   // Handler for adding new task
   const handleAddTask = () => {
     if (inputvalue.trim() !== "") {
-      const newTodo = {
-        id: uuidv4(),
-        title: inputvalue,
-        description: "",
-        completed: false,
-      };
-      const updatedTodos = [...todoslist, newTodo];
-      setTodoslist(updatedTodos);
-      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      dispatch({
+        type: "add",
+        payload: {
+          inputvalue: inputvalue,
+        },
+      });
       setInputValue("");
       setOpenSnake(true);
       setSnakeContent("تمت الاضافة بنجاح");

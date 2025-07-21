@@ -3,13 +3,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
-import TodosContext from "../contexts/TodosContext";
-import { useContext } from "react";
 import { useSnake } from "../contexts/SnakeContext";
+import { useDispatch } from "../contexts/TodosContext";
 
 export default function DeleteModal({ open, handleClose, todo }) {
-  const { todoslist, setTodoslist } = useContext(TodosContext);
   const { setOpenSnake, setSnakeContent } = useSnake();
+  const dispatch = useDispatch();
 
   return (
     <Modal
@@ -42,11 +41,12 @@ export default function DeleteModal({ open, handleClose, todo }) {
         <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }}>
           <IconButton
             onClick={() => {
-              const updatedTodos = todoslist.filter(
-                (todoo) => todoo.id !== todo.id
-              );
-              setTodoslist(updatedTodos);
-              localStorage.setItem("todos", JSON.stringify(updatedTodos));
+              dispatch({
+                type: "delete",
+                payload: {
+                  id: todo.id,
+                },
+              });
               handleClose();
               setOpenSnake(true);
               setSnakeContent("تم الحذف بنجاح");

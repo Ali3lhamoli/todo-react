@@ -5,29 +5,22 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useContext } from "react";
-import TodosContext from "../contexts/TodosContext";
 import { useSnake } from "../contexts/SnakeContext";
+import { useDispatch } from "../contexts/TodosContext";
 
 export default function EditDialog({ handleClosee, opene, todo }) {
-  const { todoslist, setTodoslist } = useContext(TodosContext);
-
   const { setOpenSnake, setSnakeContent } = useSnake();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries(formData.entries());
-    const title = formJson.title;
-    const description = formJson.description;
-    const updatedTodos = todoslist.map((todoo) => {
-      if (todoo.id === todo.id) {
-        return { ...todoo, title: title, description: description };
-      }
-      return todoo;
+    dispatch({
+      type: "edit",
+      payload: {
+        id: todo.id,
+        currentTarget: event.currentTarget,
+      },
     });
-    setTodoslist(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     handleClosee();
     setOpenSnake(true);
     setSnakeContent("تم التعديل بنجاح");
