@@ -7,8 +7,6 @@ import { SnakeProvider } from "./contexts/SnakeContext";
 import SnackBar from "./components/SnakeBar";
 
 function App() {
-  const [todoslist, setTodoslist] = React.useState([]);
-
   const theme = createTheme({
     typography: {
       fontFamily: "Alex",
